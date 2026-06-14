@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Build
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
@@ -15,7 +16,7 @@ class WallpaperManagerPlugin private constructor(private val context: Context) :
         }
     }
 
-    override fun onMethodCall(call: MethodChannel.MethodCall, result: MethodChannel.Result) {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "setHomeScreenWallpaper" -> setSingle(call, result, WallpaperManager.FLAG_SYSTEM)
             "setLockScreenWallpaper" -> setSingle(call, result, WallpaperManager.FLAG_LOCK)
@@ -25,8 +26,12 @@ class WallpaperManagerPlugin private constructor(private val context: Context) :
         }
     }
 
-    private fun setSingle(call: MethodChannel.MethodCall, result: MethodChannel.Result, flag: Int) {
-        val path = call.argument<String>("path") ?: return result.error("INVALID_ARGUMENT", "Missing path", null)
+    private fun setSingle(call: MethodCall, result: MethodChannel.Result, flag: Int) {
+        val path = call.argument<String>("path")
+        if (path == null) {
+            result.error("INVALID_ARGUMENT", "Missing path", null)
+            return
+        }
         try {
             val bmp = BitmapFactory.decodeFile(File(path).absolutePath) ?: return result.error("DECODE_FAILED", "Cannot decode image", null)
             val wm = WallpaperManager.getInstance(context)
@@ -36,8 +41,12 @@ class WallpaperManagerPlugin private constructor(private val context: Context) :
         } catch (e: Exception) { result.error("FAILED", e.message, null) }
     }
 
-    private fun setBoth(call: MethodChannel.MethodCall, result: MethodChannel.Result) {
-        val path = call.argument<String>("path") ?: return result.error("INVALID_ARGUMENT", "Missing path", null)
+    private fun setBoth(call: MethodCall, result: MethodChannel.Result) {
+        val path = call.argument<String>("path")
+        if (path == null) {
+            result.error("INVALID_ARGUMENT", "Missing path", null)
+            return
+        }
         try {
             val bmp = BitmapFactory.decodeFile(File(path).absolutePath) ?: return result.error("DECODE_FAILED", "Cannot decode image", null)
             val wm = WallpaperManager.getInstance(context)
