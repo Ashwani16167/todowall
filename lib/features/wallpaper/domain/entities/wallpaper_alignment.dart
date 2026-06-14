@@ -1,0 +1,1 @@
+enum WallpaperAlignment { left, center }
