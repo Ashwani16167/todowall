@@ -1,4 +1,5 @@
 import 'package:todo_wallpaper/features/tasks/data/models/task_model.dart';
+
 abstract class TaskRepository {
   List<TaskModel> getAllTasks();
   Stream<List<TaskModel>> watchTasks();

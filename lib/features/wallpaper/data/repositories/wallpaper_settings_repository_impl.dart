@@ -7,13 +7,18 @@ class WallpaperSettingsRepositoryImpl implements WallpaperSettingsRepository {
   static const _key = 'wallpaper_settings';
   final Box<WallpaperSettingsModel> _box;
 
-  @override WallpaperSettingsModel getSettings() => _box.get(_key) ?? WallpaperSettingsModel();
+  @override
+  WallpaperSettingsModel getSettings() =>
+      _box.get(_key) ?? WallpaperSettingsModel();
 
-  @override Stream<WallpaperSettingsModel> watchSettings() async* {
+  @override
+  Stream<WallpaperSettingsModel> watchSettings() async* {
     yield getSettings();
     yield* _box.watch(key: _key).map((_) => getSettings());
   }
 
-  @override Future<void> saveSettings(WallpaperSettingsModel s) => _box.put(_key, s);
-  @override Future<void> resetToDefaults() => _box.put(_key, WallpaperSettingsModel());
+  @override
+  Future<void> saveSettings(WallpaperSettingsModel s) => _box.put(_key, s);
+  @override
+  Future<void> resetToDefaults() => _box.put(_key, WallpaperSettingsModel());
 }

@@ -17,35 +17,55 @@ class TaskRepositoryImpl implements TaskRepository {
   Stream<List<TaskModel>> watchTasks() =>
       _box.watch().map((_) => getAllTasks()).startWith(getAllTasks());
 
-  @override Future<void> addTask(TaskModel task) async {
-    final max = _box.values.isEmpty ? -1 : _box.values.map((t) => t.sortOrder).reduce((a, b) => a > b ? a : b);
+  @override
+  Future<void> addTask(TaskModel task) async {
+    final max = _box.values.isEmpty
+        ? -1
+        : _box.values.map((t) => t.sortOrder).reduce((a, b) => a > b ? a : b);
     task.sortOrder = max + 1;
     await _box.put(task.id, task);
   }
 
-  @override Future<void> updateTask(TaskModel task) => _box.put(task.id, task);
-  @override Future<void> deleteTask(String id) => _box.delete(id);
+  @override
+  Future<void> updateTask(TaskModel task) => _box.put(task.id, task);
+  @override
+  Future<void> deleteTask(String id) => _box.delete(id);
 
-  @override Future<void> toggleComplete(String id) async {
-    final t = _box.get(id); if (t == null) return;
-    t.completed = !t.completed; await t.save();
+  @override
+  Future<void> toggleComplete(String id) async {
+    final t = _box.get(id);
+    if (t == null) return;
+    t.completed = !t.completed;
+    await t.save();
   }
 
-  @override Future<void> reorderTasks(List<String> ids) async {
+  @override
+  Future<void> reorderTasks(List<String> ids) async {
     for (var i = 0; i < ids.length; i++) {
-      final t = _box.get(ids[i]); if (t == null) continue;
-      t.sortOrder = i; await t.save();
+      final t = _box.get(ids[i]);
+      if (t == null) {
+        continue;
+      }
+      t.sortOrder = i;
+      await t.save();
     }
   }
 
-  @override Future<void> replaceAll(List<TaskModel> tasks) async {
+  @override
+  Future<void> replaceAll(List<TaskModel> tasks) async {
     await _box.clear();
-    for (final t in tasks) await _box.put(t.id, t);
+    for (final t in tasks) {
+      await _box.put(t.id, t);
+    }
   }
 
-  @override Future<void> clearAll() => _box.clear();
+  @override
+  Future<void> clearAll() => _box.clear();
 }
 
 extension _StartWith<T> on Stream<T> {
-  Stream<T> startWith(T v) async* { yield v; yield* this; }
+  Stream<T> startWith(T v) async* {
+    yield v;
+    yield* this;
+  }
 }

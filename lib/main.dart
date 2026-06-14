@@ -8,7 +8,8 @@ import 'package:todo_wallpaper/services/background/background_task_service.dart'
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHive();
-  await Workmanager().initialize(backgroundTaskDispatcher, isInDebugMode: false);
+  await Workmanager()
+      .initialize(backgroundTaskDispatcher, isInDebugMode: false);
   await registerBackgroundTasks();
   runApp(const ProviderScope(child: TodoWallpaperApp()));
 }

@@ -15,7 +15,8 @@ final wallpaperAutoUpdateProvider = Provider<void>((ref) {
 
   Future<void> regenerate() async {
     final tasks = ref.read(taskListProvider).value;
-    final settings = ref.read(wallpaperSettingsProvider).value ?? WallpaperSettingsModel();
+    final settings =
+        ref.read(wallpaperSettingsProvider).value ?? WallpaperSettingsModel();
     if (tasks == null) return;
     try {
       final bytes = await renderer.render(tasks, settings);
@@ -28,8 +29,16 @@ final wallpaperAutoUpdateProvider = Provider<void>((ref) {
     }
   }
 
-  void schedule() { debounce?.cancel(); debounce = Timer(const Duration(milliseconds: 600), regenerate); }
-  ref.listen(taskListProvider, (_, next) { if (next.hasValue) schedule(); });
-  ref.listen(wallpaperSettingsProvider, (_, next) { if (next.hasValue) schedule(); });
+  void schedule() {
+    debounce?.cancel();
+    debounce = Timer(const Duration(milliseconds: 600), regenerate);
+  }
+
+  ref.listen(taskListProvider, (_, next) {
+    if (next.hasValue) schedule();
+  });
+  ref.listen(wallpaperSettingsProvider, (_, next) {
+    if (next.hasValue) schedule();
+  });
   ref.onDispose(() => debounce?.cancel());
 });

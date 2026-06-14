@@ -16,5 +16,7 @@ Future<void> initHive() async {
   ]);
 }
 
-final taskBoxProvider = Provider<Box<TaskModel>>((ref) => Hive.box<TaskModel>(HiveBoxNames.tasks));
-final wallpaperSettingsBoxProvider = Provider<Box<WallpaperSettingsModel>>((ref) => Hive.box<WallpaperSettingsModel>(HiveBoxNames.wallpaperSettings));
+final taskBoxProvider =
+    Provider<Box<TaskModel>>((ref) => Hive.box<TaskModel>(HiveBoxNames.tasks));
+final wallpaperSettingsBoxProvider = Provider<Box<WallpaperSettingsModel>>(
+    (ref) => Hive.box<WallpaperSettingsModel>(HiveBoxNames.wallpaperSettings));

@@ -1,30 +1,21 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:todo_wallpaper/main.dart';
+import 'package:todo_wallpaper/features/tasks/data/models/task_model.dart';
+import 'package:todo_wallpaper/features/tasks/domain/entities/task_priority.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  test('TaskModel copyWith keeps existing values by default', () {
+    final task = TaskModel(
+      id: 'task-1',
+      title: 'Write todo wallpaper',
+      priority: TaskPriority.high,
+      createdAt: DateTime(2026, 6, 14),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    final updated = task.copyWith(completed: true);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(updated.id, task.id);
+    expect(updated.title, task.title);
+    expect(updated.priority, TaskPriority.high);
+    expect(updated.completed, isTrue);
   });
 }

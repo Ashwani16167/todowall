@@ -14,7 +14,8 @@ class TodoWallpaperApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(wallpaperAutoUpdateProvider);
     final appBox = Hive.box(HiveBoxNames.appSettings);
-    final onboardingDone = appBox.get('onboarding_done', defaultValue: false) as bool;
+    final onboardingDone =
+        appBox.get('onboarding_done', defaultValue: false) as bool;
     return MaterialApp(
       title: 'Todo Wallpaper',
       debugShowCheckedModeBanner: false,
